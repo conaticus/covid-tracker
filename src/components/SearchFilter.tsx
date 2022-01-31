@@ -1,35 +1,30 @@
 import { ChangeEvent, useState } from "react";
-import { CaseDataObject, SetDataFunction } from "../types";
+import { SetDataFunction } from "../types";
 
 interface Props {
-    casesData: CaseDataObject;
-    selectedCountry: string;
-    setSelectedCountry: SetDataFunction;
+    selectedSearch: string;
+    setSelectedSearch: SetDataFunction;
+    searchArray: string[];
 }
 
-const CountryFilter = ({
-    selectedCountry,
-    setSelectedCountry,
-    casesData,
+const SearchFilter = ({
+    selectedSearch,
+    setSelectedSearch,
+    searchArray,
 }: Props) => {
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [filterSearchValue, setFilterSearchValue] = useState<string>("");
 
-    const countries: string[] = [];
-    for (const country in casesData) {
-        countries.push(country);
-    }
-
-    const filteredCountries = countries.filter((country) =>
-        country.toLowerCase().includes(filterSearchValue)
+    const filteredSearch = searchArray.filter((search) =>
+        search.toLowerCase().includes(filterSearchValue)
     );
 
     const onFilterSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFilterSearchValue(e.target.value);
     };
 
-    const onCountrySelect = (country: string) => {
-        setSelectedCountry(country);
+    const onSearchSelect = (search: string) => {
+        setSelectedSearch(search);
         setShowFilter(false);
     };
 
@@ -39,7 +34,7 @@ const CountryFilter = ({
                 className="filter-btn"
                 onClick={() => setShowFilter(!showFilter)}
             >
-                {selectedCountry}
+                {selectedSearch}
             </button>
 
             <div
@@ -60,15 +55,15 @@ const CountryFilter = ({
                     />
                 </div>
 
-                {filteredCountries.length === 0 && <p>No results.</p>}
+                {filterSearchValue.length === 0 && <p>No results.</p>}
 
-                {filteredCountries.map((country, idx) => (
+                {filteredSearch.map((search, idx) => (
                     <button
                         key={idx}
-                        onClick={() => onCountrySelect(country)}
+                        onClick={() => onSearchSelect(search)}
                         className="filter-option"
                     >
-                        {country}
+                        {search}
                     </button>
                 ))}
             </div>
@@ -76,4 +71,4 @@ const CountryFilter = ({
     );
 };
 
-export default CountryFilter;
+export default SearchFilter;

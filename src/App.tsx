@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import apiRequest from "./api/apiRequest";
 import CaseData from "./components/CaseData";
-import CountryFilter from "./components/CountryFilter";
+import SearchFilter from "./components/SearchFilter";
 import { CaseDataObject } from "./types";
 
 const App = () => {
@@ -12,24 +12,22 @@ const App = () => {
         apiRequest("cases", setCasesData);
     }, []);
 
+    const countries: string[] = [];
+    for (const country in casesData) {
+        countries.push(country);
+    }
+
     if (!casesData) {
         return <p>Loading...</p>;
     } else {
         return (
             <div style={{ padding: "20px" }}>
                 <div style={{ display: "flex" }}>
-                    <CountryFilter
-                        casesData={casesData}
-                        selectedCountry={selectedCountry}
-                        setSelectedCountry={setSelectedCountry}
+                    <SearchFilter
+                        selectedSearch={selectedCountry}
+                        setSelectedSearch={setSelectedCountry}
+                        searchArray={countries}
                     />
-                    <p style={{ marginLeft: "20px" }}>
-                        (updated:{" "}
-                        {new Date(
-                            casesData[selectedCountry].All.updated
-                        ).toLocaleDateString()}
-                        )
-                    </p>
                 </div>
                 <CaseData countryData={casesData[selectedCountry].All} />
             </div>
